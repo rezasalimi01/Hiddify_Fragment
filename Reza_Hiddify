@@ -1,0 +1,627 @@
+{
+  "log": {
+    "level": "warn",
+    "output": "box.log",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns-remote",
+        "address": "https://dnslow.me/dns-query",
+        "address_resolver": "dns-direct"
+      },
+      {
+        "tag": "dns-trick-direct",
+        "address": "https://sky.rethinkdns.com/",
+        "detour": "direct-fragment"
+      },
+      {
+        "tag": "dns-direct",
+        "address": "1.1.1.1",
+        "address_resolver": "dns-local",
+        "detour": "direct"
+      },
+      {
+        "tag": "dns-local",
+        "address": "local",
+        "detour": "direct"
+      },
+      {
+        "tag": "dns-block",
+        "address": "rcode://success"
+      }
+    ],
+    "rules": [
+      {
+        "domain": [
+          "dnslow.me",
+          "www.eligasht.com",
+          "stats.defisaver.com",
+          "admin.ozonedesk.com",
+          "www.maralhost.com",
+          "www.asamserver.com",
+          "www.1000site.ir",
+          "www.rxhomeo.in",
+          "esrwtdata.mixerbox.com",
+          "mpo99id.lat",
+          "shop-bmw.fr",
+          "procentralhub.com"
+        ],
+        "server": "dns-direct"
+      },
+      {
+        "domain_suffix": ".ir",
+        "geosite": "ir",
+        "server": "dns-direct"
+      },
+      {
+        "domain": "cp.cloudflare.com",
+        "server": "dns-remote",
+        "rewrite_ttl": 3000
+      }
+    ],
+    "final": "dns-remote",
+    "static_ips": {
+      "sky.rethinkdns.com": [
+        "188.114.96.3",
+        "188.114.97.3",
+        "2a06:98c1:3120::3",
+        "2a06:98c1:3121::3",
+        "104.18.203.232",
+        "104.18.202.232",
+        "188.114.96.3",
+        "188.114.97.3",
+        "2a06:98c1:3121::3",
+        "2a06:98c1:3120::3"
+      ]
+    },
+    "independent_cache": true
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "mtu": 9000,
+      "inet4_address": "172.19.0.1/28",
+      "inet6_address": "fdfe:dcba:9876::1/126",
+      "auto_route": true,
+      "strict_route": true,
+      "endpoint_independent_nat": true,
+      "sniff": true,
+      "sniff_override_destination": true,
+      "domain_strategy": "prefer_ipv4"
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 2334,
+      "sniff": true,
+      "sniff_override_destination": true,
+      "domain_strategy": "prefer_ipv4"
+    },
+    {
+      "type": "direct",
+      "tag": "dns-in",
+      "listen": "127.0.0.1",
+      "listen_port": 6450,
+      "override_address": "1.1.1.1",
+      "override_port": 53
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "select",
+      "outbounds": [
+        "auto",
+        "🇩🇪 M247 | 1",
+        "🇩🇪 Netcup | 2",
+        "🇸🇪 Amazon  | 3",
+        "🇫🇷 Akamai Cloud | 4",
+        "🇩🇪 Amazon  | 5",
+        "🇩🇪 Amazon  | 6",
+        "🇳🇱 GT Host | 7",
+        "🇪🇺 Multi location  | 8",
+        "🇪🇺 Multi location  | 9",
+        "🇺🇦 ITL | 10",
+        "🇧🇪 Stark Industries  | 11"
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "urltest",
+      "tag": "auto",
+      "outbounds": [
+        "🇩🇪 M247 | 1",
+        "🇩🇪 Netcup | 2",
+        "🇸🇪 Amazon  | 3",
+        "🇫🇷 Akamai Cloud | 4",
+        "🇩🇪 Amazon  | 5",
+        "🇩🇪 Amazon  | 6",
+        "🇳🇱 GT Host | 7",
+        "🇪🇺 Multi location  | 8",
+        "🇪🇺 Multi location  | 9",
+        "🇺🇦 ITL | 10",
+        "🇧🇪 Stark Industries  | 11"
+      ],
+      "url": "http://cp.cloudflare.com/",
+      "interval": "10m0s"
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 M247 | 1",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "www.eligasht.com",
+      "server_port": 443,
+      "uuid": "31aa719b-742f-430d-8a59-6abfbf538842",
+      "tls": {
+        "enabled": true,
+        "server_name": "euyehjbrjfkfkfkfuirjck52owplfkpla.erenyeager.cloudns.biz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/ /ed?=2048",
+        "headers": {
+          "Host": "eula.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "packet_encoding": "xudp"
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 Netcup | 2",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "stats.defisaver.com",
+      "server_port": 443,
+      "uuid": "e5e34431-e29e-4821-a986-f3231933beb9",
+      "tls": {
+        "enabled": true,
+        "server_name": "mitsuri.erenyeager.cloudns.biz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/ed?=2048",
+        "headers": {
+          "Host": "mitsuri.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "packet_encoding": "xudp"
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇪 Amazon  | 3",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "admin.ozonedesk.com",
+      "server_port": 443,
+      "uuid": "38535031-ccc3-4a94-bd54-c68806486406",
+      "tls": {
+        "enabled": true,
+        "server_name": "ffvhyfhibfrhhddrhh965ommcdwwr5862485314866urina.erenyeager.cloudns.biz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/ed?=2048",
+        "headers": {
+          "Host": "furina.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "packet_encoding": "xudp"
+    },
+    {
+      "type": "vmess",
+      "tag": "🇫🇷 Akamai Cloud | 4",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "www.maralhost.com",
+      "server_port": 443,
+      "uuid": "45f63e92-f782-4cac-84b8-e61cb5a5bfd0",
+      "security": "auto",
+      "authenticated_length": true,
+      "tls": {
+        "enabled": true,
+        "server_name": "mikftyhgasa.erenyeager.cloudns.biz",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/adenc35.fixedlfoat.top/linkws",
+        "headers": {
+          "Host": "mikasa.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 Amazon  | 5",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "www.asamserver.com",
+      "server_port": 443,
+      "uuid": "0b4b623c-2914-494d-b6b8-b03fbf4d6655",
+      "tls": {
+        "enabled": true,
+        "server_name": "ndt3G6HHYuKepav839d2ia.erenyeager.cloudns.biz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/ed?=2048",
+        "headers": {
+          "Host": "navia.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "packet_encoding": "xudp"
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 Amazon  | 6",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "www.1000site.ir",
+      "server_port": 443,
+      "uuid": "7bedf632-b4c2-4e90-9d8b-f42ee7145534",
+      "tls": {
+        "enabled": true,
+        "server_name": "yaeof09rjrjdowp3ojfif8fmiko.erenyeager.cloudns.biz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/ed?=2048",
+        "headers": {
+          "Host": "yaemiko.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "packet_encoding": "xudp"
+    },
+    {
+      "type": "vmess",
+      "tag": "🇳🇱 GT Host | 7",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "www.rxhomeo.in",
+      "server_port": 443,
+      "uuid": "06195b5b-3815-4a07-96f7-47eefbb1b143",
+      "security": "auto",
+      "authenticated_length": true,
+      "tls": {
+        "enabled": true,
+        "server_name": "mikjw5j63j3ih3g1g14g5jk3ppeyks6jasa.erenyeager.cloudns.biz",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/urnxewzvh.site/kwhmvws",
+        "headers": {
+          "Host": "mikasa.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      }
+    },
+    {
+      "type": "vmess",
+      "tag": "🇪🇺 Multi location  | 8",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "esrwtdata.mixerbox.com",
+      "server_port": 443,
+      "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
+      "security": "auto",
+      "authenticated_length": true,
+      "tls": {
+        "enabled": true,
+        "server_name": "mik8c9i3j30d0wjh3if9ifjgn4930jcjfasa.erenyeager.cloudns.biz",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/kellie.makeup/linkvws",
+        "headers": {
+          "Host": "mikasa.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      }
+    },
+    {
+      "type": "vmess",
+      "tag": "🇪🇺 Multi location  | 9",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "mpo99id.lat",
+      "server_port": 443,
+      "uuid": "45f63e92-f782-4cac-84b8-e61cb5a5bfd0",
+      "security": "auto",
+      "authenticated_length": true,
+      "tls": {
+        "enabled": true,
+        "server_name": "miefgu8554znmc963a26kasa.erenyeager.cloudns.biz",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/adenc35.fixedlfoat.top/linkws",
+        "headers": {
+          "Host": "mikasa.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      }
+    },
+    {
+      "type": "vmess",
+      "tag": "🇺🇦 ITL | 10",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "shop-bmw.fr",
+      "server_port": 443,
+      "uuid": "4a9f28ec-cca8-11ee-b5c8-ef30062eb449",
+      "security": "auto",
+      "authenticated_length": true,
+      "tls": {
+        "enabled": true,
+        "server_name": "rangu8yr2qdjp0k75dvi82qfj90dom.erenyeager.cloudns.biz",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/vpnjantit/ua1.vpnjantit.com",
+        "headers": {
+          "Host": "random.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇧🇪 Stark Industries  | 11",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      },
+      "server": "procentralhub.com",
+      "server_port": 443,
+      "uuid": "ced1b2d6-94a1-4874-a7fe-c03625ba39a7",
+      "tls": {
+        "enabled": true,
+        "server_name": "ranh8hceygcfyyzwwdom.erenyeager.cloudns.biz",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "tls_tricks": {
+          "mixedcase_sni": true
+        }
+      },
+      "multiplex": {
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/vless/be3-vless.sshmax.xyz",
+        "headers": {
+          "Host": "random.erenyeager.cloudns.biz"
+        },
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "packet_encoding": "xudp"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "direct",
+      "tag": "direct-fragment",
+      "tls_fragment": {
+        "enabled": true,
+        "size": "5-10",
+        "sleep": "1-5"
+      }
+    },
+    {
+      "type": "direct",
+      "tag": "bypass"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    }
+  ],
+  "route": {
+    "geoip": {
+      "path": "geo-assets/sagernet-sing-geoip-geoip.db"
+    },
+    "geosite": {
+      "path": "geo-assets/sagernet-sing-geosite-geosite.db"
+    },
+    "rules": [
+      {
+        "inbound": "dns-in",
+        "outbound": "dns-out"
+      },
+      {
+        "port": 53,
+        "outbound": "dns-out"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "select"
+      },
+      {
+        "domain_suffix": ".ir",
+        "geosite": "ir",
+        "geoip": "ir",
+        "outbound": "bypass"
+      }
+    ],
+    "auto_detect_interface": true,
+    "override_android_vpn": true
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "clash.db"
+    },
+    "clash_api": {
+      "external_controller": "127.0.0.1:6756"
+    }
+  }
+}
